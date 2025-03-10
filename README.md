@@ -14,14 +14,31 @@ An MCP server that provides file backup and restoration capabilities for AI agen
 
 ## Installation
 
+## Development
+
 ```bash
-npm install -g @modelcontextprotocol/server-backup
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Start the server
+npm start
+
+# Run tests
+node test\ scripts/test_client.js
+```
+
+
+```bash
+NOT YET npm install -g @modelcontextprotocol/server-backup
 ```
 
 Or use it directly with npx:
 
 ```bash
-npx @modelcontextprotocol/server-backup
+NOT YET npx @modelcontextprotocol/server-backup
 ```
 
 ## Configuration
@@ -221,21 +238,6 @@ All tool responses include structured content in the following format:
 }
 ```
 
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Start the server
-npm start
-
-# Run tests
-node test\ scripts/test_client.js
-```
 
 ## License
 
