@@ -2,7 +2,7 @@
 
 An MCP server that provides file backup and restoration capabilities for AI agents and code editing tools.
 
-### Tested in Cursor and Windsurf. Windsurf has problems with MCP chatter - it takes a few goes to get it right.
+## Tested in Cursor and Windsurf. Windsurf has problems with MCP chatter - it takes a few goes to get it right.
 
 ## Features
 - Adds agent context to the backup metadata
@@ -72,6 +72,25 @@ To use this server with Windsurf, you need to add it to your Windsurf MCP config
     }
   }
 }
+
+or running locally 
+
+{
+  "mcpServers": {
+        
+    "backup": {
+      "command": "node", 
+      "args": ["C:/mcpserverbackup/dist/index.js"],
+      "env": {
+        "BACKUP_DIR": "C:/Users/yourusername/.code_backups",
+        "EMERGENCY_BACKUP_DIR": "C:/Users/yourusername/.code_emergency_backups",
+        "MAX_VERSIONS": "20"
+      }
+    }
+  }
+}
+
+#you can place the file in the project folder in Cursor adding folder .cursor and file mcp.json
 ```
 
 3. If you have other MCP servers (like GitHub), your configuration might look like:
