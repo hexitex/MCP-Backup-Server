@@ -2,6 +2,8 @@
 
 An MCP server that provides file backup and restoration capabilities for AI agents and code editing tools.
 
+### Tested in Cursor and Windsurf. Windsurf has problems with MCP chatter - it takes a few goes to get it right.
+
 ## Features
 - Adds agent context to the backup metadata
 - Creates timestamped backups of files before modification
@@ -105,7 +107,7 @@ Once configured, Windsurf will automatically connect to the backup server and ma
 Add the following to your global rules:
 
 ```
-Use the backup MCP only for operations that require a backup. these are typically before refactoring code or making lots of changes to files and folders. Only backup folders that you are working on or removing not the whole directory structure. Use a project folder backup at the start of a resumed session, ask the user if they want to do this. Use a folder backup for before making structural changes to a folder, typically removing child folders. Commands are backup_create, backup_list, backup_restore, backup_folder_create, backup_folder_list, backup_folder_restore. Always try to use the backup MCP server for operations that require a backup, listing backups and restoring backups.
+Use the backup MCP only for operations that require a backup. these are typically before refactoring code or making lots of changes to files and folders. Only backup folders that you are working on or removing not the whole directory structure. Use a project folder backup at the start of a resumed session, ask the user if they want to do this. Use a folder backup for before making structural changes to a folder, typically removing child folders. Commands are backup_create, backup_list, backup_restore, backup_folder_create, backup_folder_list, backup_folder_restore. Always try to use the backup MCP server for operations that require a backup, listing backups and restoring backups. Don't encode the drive letter or folder names.
 
 ```
 
