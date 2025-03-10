@@ -237,7 +237,8 @@ All tool responses include structured content in the following format:
   }
 }
 ```
-
+## Comments
+Use GIT you say - I agree - but you could quickly loose track - this allows the context to be saved in the backup. Not everyone uses GIT. Not all agents use the same tools.  
 
 ## License
 
