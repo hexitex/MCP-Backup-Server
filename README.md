@@ -1,266 +1,270 @@
-# @modelcontextprotocol/server-backup
+# MCP Backup Server
 
-An MCP server that provides file backup and restoration capabilities for AI agents and code editing tools.
+A specialized MCP server that provides backup and restoration capabilities for AI agents and code editing tools. Tested in both Cursor and Windsurf editors.
 
-## Tested in Cursor and Windsurf. Windsurf has problems with MCP chatter - it takes a few goes to get it right.
+Repository: [https://github.com/hexitex/MCP-Backup-Server](https://github.com/hexitex/MCP-Backup-Server)
+
+## Why Use This (Not Git)
+
+This system serves a different purpose than Git:
+
+**Pros:**
+- Creates instant, targeted backups with agent context
+- Simpler than Git for single-operation safety
+- Preserves thought process and intent in backups
+- No commit messages or branching required
+- Better for AI agents making critical changes
+- Works without repository initialization
+- Faster for emergency "save points" during edits
+
+**Cons:**
+- Not for long-term version tracking 
+- Limited collaboration features
+- No merging or conflict resolution
+- No distributed backup capabilities
+- Not a replacement for proper version control
+- Stores complete file copies rather than diffs
+
+**When to use:** Before risky edits, folder restructuring, or when you need quick safety backups with context.
+
+**When to use Git instead:** For proper version history, collaboration, and project management.
 
 ## Features
-- Adds agent context to the backup metadata
-- Creates timestamped backups of files before modification
-- Maintains original directory structure for easy identification
-- Supports multiple backup versions with automatic cleanup
-- Provides progress tracking for long-running operations
-- Supports cancellation of ongoing operations
-- Complies with JSON-RPC 2.0 and MCP protocol standards
-- Emergency backups are stored separately during restore operations to prevent data loss to the original folder or file, these should be in a seperate directory from regular backups.
+- Preserves agent context and reasoning
+- Creates targeted, minimal backups
+- Supports file and folder operations
+- Maintains version history
+- Provides restore safety
+- Uses pattern filtering
+- Tracks operations
+- Allows cancellation
 
-## Installation
-
-## Development
+## Setup
 
 ```bash
 # Install dependencies
 npm install
 
-# Build the project
+# Build TypeScript files
 npm run build
 
-# Start the server
+# Start the backup server
 npm start
-
-# Run tests
-node test\ scripts/test_client.js
 ```
 
+## Config
 
-```bash
-NOT YET npm install -g @modelcontextprotocol/server-backup
-```
+Env:
+- `BACKUP_DIR`: Backup directory (./.code_backups)
+- `EMERGENCY_BACKUP_DIR`: Emergency backups (./.code_emergency_backups)
+- `MAX_VERSIONS`: Version limit (10)
 
-Or use it directly with npx:
+Configure in editor:
 
-```bash
-NOT YET npx @modelcontextprotocol/server-backup
-```
-
-## Configuration
-
-The server is configured through environment variables:
-
-- `BACKUP_DIR`: Directory where backups are stored (default: `~/.code_backups`)
-- `EMERGENCY_BACKUP_DIR`: Directory where emergency backups are stored during restore operations (default: `~/.code_emergency_backups`)
-- `MAX_VERSIONS`: Maximum number of backup versions to keep per file (default: `10`)
-
-## Windsurf Integration
-
-To use this server with Windsurf, you need to add it to your Windsurf MCP configuration:
-
-1. Open or create the MCP configuration file at `~/.codeium/windsurf/mcp_config.json`
-2. Add the backup server configuration as shown below:
-
+Windsurf MCP config:
 ```json
 {
   "mcpServers": {
     "backup": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-backup"],
+      "command": "node",
+      "args": ["./dist/index.js"],
       "env": {
-        "BACKUP_DIR": "~/.code_backups",
-        "EMERGENCY_BACKUP_DIR": "~/.code_emergency_backups",
-        "MAX_VERSIONS": "10"
-      }
-    }
-  }
-}
-
-or running locally 
-
-{
-  "mcpServers": {
-        
-    "backup": {
-      "command": "node", 
-      "args": ["C:/mcpserverbackup/dist/index.js"],
-      "env": {
-        "BACKUP_DIR": "C:/Users/yourusername/.code_backups",
-        "EMERGENCY_BACKUP_DIR": "C:/Users/yourusername/.code_emergency_backups",
+        "BACKUP_DIR": "./.code_backups",
+        "EMERGENCY_BACKUP_DIR": "./.code_emergency_backups",
         "MAX_VERSIONS": "20"
       }
     }
   }
 }
-
-#you can place the file in the project folder in Cursor adding folder .cursor and file mcp.json
 ```
 
-3. If you have other MCP servers (like GitHub), your configuration might look like:
+Cursor: Create `.cursor/mcp.json` with similar config.
 
+## Tools
+
+### File Operations
+- `backup_create`: Create backup with context
+- `backup_list`: List available backups
+- `backup_restore`: Restore with safety backup
+
+### Folder Operations  
+- `backup_folder_create`: Backup with pattern filtering
+- `backup_folder_list`: List folder backups
+- `backup_folder_restore`: Restore folder structure
+
+### Management
+- `backup_list_all`: List all backups
+- `mcp_cancel`: Cancel operations
+
+## When to Use Backups
+
+Only create backups when truly needed:
+
+1. **Before Refactoring**: When changing important code
+2. **Before Removing Folders**: When reorganizing project structure
+3. **Multiple Related Changes**: When updating several connected files
+4. **Resuming Major Work**: When continuing significant changes
+5. **Before Restores**: Create safety backup before restoring
+
+Keep backups minimal and purposeful. Document why each backup is needed.
+
+## Rules for Copy-Paste
+
+```
+Always try to use the backup MCP server for operations that require a backup, listing backups and restoring backups.
+Only backup before critical code changes, folder removal, changes to multiple related files, resuming major work, or restoring files.
+Keep backups minimal and focused only on files being changed.
+Always provide clear context for why a backup is being created.
+Use pattern filters to exclude irrelevant files from folder backups.
+Use relative file paths when creating backups.
+Create emergency backups before restore operations.
+Clean up old backups to maintain system efficiency.
+Backup tools: backup_create, backup_list, backup_restore, backup_folder_create, backup_folder_list, backup_folder_restore, backup_list_all, mcp_cancel.
+```
+
+## For Human Users
+
+Simple commands like these at the start you may have to mention MCP tool
+
+```
+# Back up an important file
+"Back up my core file before refactoring"
+
+# Back up a folder before changes
+"Create backup of the API folder before restructuring"
+
+# Find previous backups
+"Show me my recent backups"
+
+# Restore a previous version
+"Restore my core file from this morning"
+```
+
+## Agent Examples
+
+### Quick Backups
 ```json
+// Before project changes
 {
-  "mcpServers": {
-    "backup": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-backup"],
-      "env": {
-        "BACKUP_DIR": "~/.code_backups",
-        "EMERGENCY_BACKUP_DIR": "~/.code_emergency_backups",
-        "MAX_VERSIONS": "10"
-      }
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
-      }
-    }
+  "name": "mcp0_backup_folder_create",
+  "parameters": {
+    "folder_path": "./src",
+    "include_pattern": "*.{js,ts}",
+    "exclude_pattern": "{node_modules,dist,test}/**",
+    "agent_context": "Start auth changes"
+  }
+}
+
+// Before core fix
+{
+  "name": "mcp0_backup_create",
+  "parameters": {
+    "file_path": "./src/core.js",
+    "agent_context": "Fix validation"
   }
 }
 ```
 
-4. Save the configuration file
-5. Restart Windsurf to apply the changes refresh also works after config changes 
-
-Once configured, Windsurf will automatically connect to the backup server and make it available to AI agents. 
-
-Add the following to your global rules:
-
-```
-Use the backup MCP only for operations that require a backup. these are typically before refactoring code or making lots of changes to files and folders. Only backup folders that you are working on or removing not the whole directory structure. Use a project folder backup at the start of a resumed session, ask the user if they want to do this. Use a folder backup for before making structural changes to a folder, typically removing child folders. Commands are backup_create, backup_list, backup_restore, backup_folder_create, backup_folder_list, backup_folder_restore. Always try to use the backup MCP server for operations that require a backup, listing backups and restoring backups. Don't encode the drive letter or folder names.
-
-```
-
-## Agent Instructions
-
-When implementing agents that use the MCP backup server, follow these guidelines:
-
-1. **Use Direct Tool Interface**: Always use the MCP tools directly through the tool interface (backup_create, backup_list, etc.) rather than through alternative means.
-
-2. **Use Configured Backup Folders**: Always use the configured backup folders when listing or restoring backups. The backup location is specified by the `BACKUP_DIR` environment variable.
-
-3. **Original Paths for Listing**: When listing backups, provide the original file or folder path (not the backup path) to the backup_list and backup_folder_list tools.
-
-4. **Emergency Backup Location**: For emergency backups during restore operations, use the location specified by the `EMERGENCY_BACKUP_DIR` environment variable.
-
-5. **Selective Backups**: Only backup folders that you are working on or removing, not the whole directory structure.
-
-6. **Session Start Backups**: Create a project folder backup at the start of a resumed session.
-
-7. **Structural Change Backups**: Create a folder backup before making structural changes to a folder, especially when removing child folders.
-
-## MCP Protocol Integration
-
-The server follows the MCP tools API specification with the following tools:
-
-### `tools/list`
-
-Lists all available tools with their descriptions and input schemas.
-
+### Resume Session
 ```json
+// View recent work
 {
-  "jsonrpc": "2.0",
-  "method": "tools/list",
-  "params": {},
-  "id": "request-id"
+  "name": "mcp0_backup_list_all",
+  "parameters": {
+    "include_pattern": "src/**/*.js"
+  }
 }
-```
 
-### `tools/call`
-
-Calls a specific tool with the provided arguments.
-
-#### Tools
-
-##### `backup_create`
-Creates a backup of a specified file.
-
-```json
+// Get last version
 {
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "backup_create",
-    "arguments": {
-      "file_path": "/absolute/path/to/file"
-    }
-  },
-  "id": "request-id"
-}
-```
-
-##### `backup_list`
-Lists all backups for a specified file.
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "backup_list",
-    "arguments": {
-      "file_path": "/absolute/path/to/file"
-    }
-  },
-  "id": "request-id"
-}
-```
-
-##### `backup_restore`
-Restores a file from a specified backup.
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "backup_restore",
-    "arguments": {
-      "file_path": "/absolute/path/to/file",
-      "timestamp": "20250309-120000"
-    }
-  },
-  "id": "request-id"
-}
-```
-
-##### `mcp_cancel`
-Cancels an ongoing operation.
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "mcp_cancel",
-    "arguments": {
-      "operationId": "operation-id"
-    }
-  },
-  "id": "request-id"
-}
-```
-
-### Response Format
-
-All tool responses include structured content in the following format:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": "request-id",
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "JSON-formatted result data"
-      }
-    ]
+  "name": "mcp0_backup_restore",
+  "parameters": {
+    "file_path": "./src/core.js",
+    "timestamp": "20250310-055950-000",
+    "create_emergency_backup": true
   }
 }
 ```
-## Comments
-Use GIT you say - I agree - but you could quickly loose track - this allows the context to be saved in the backup. Not everyone uses GIT. Not all agents use the same tools.  
+
+### Core Changes
+```json
+// Critical update
+{
+  "name": "mcp0_backup_create",
+  "parameters": {
+    "file_path": "./src/core.js",
+    "agent_context": "Add validation"
+  }
+}
+
+// Module update
+{
+  "name": "mcp0_backup_folder_create",
+  "parameters": {
+    "folder_path": "./src/api",
+    "include_pattern": "*.js",
+    "exclude_pattern": "test/**",
+    "agent_context": "Refactor modules"
+  }
+}
+```
+
+### Restore Points
+```json
+// Check versions
+{
+  "name": "mcp0_backup_list",
+  "parameters": {
+    "file_path": "./src/core.js"
+  }
+}
+
+{
+  "name": "mcp0_backup_folder_list",
+  "parameters": {
+    "folder_path": "./src/api"
+  }
+}
+
+// File restore
+{
+  "name": "mcp0_backup_restore",
+  "parameters": {
+    "file_path": "./src/core.js",
+    "timestamp": "20250310-055950-000",
+    "create_emergency_backup": true
+  }
+}
+
+// Folder restore
+{
+  "name": "mcp0_backup_folder_restore",
+  "parameters": {
+    "folder_path": "./src/api",
+    "timestamp": "20250310-055950-000",
+    "create_emergency_backup": true
+  }
+}
+```
+
+### Manage
+```json
+// List recent
+{
+  "name": "mcp0_backup_list_all",
+  "parameters": {
+    "include_pattern": "src/**/*.js"
+  }
+}
+
+// Stop backup
+{
+  "name": "mcp0_mcp_cancel",
+  "parameters": {
+    "operationId": "backup_1234"
+  }
+}
+```
 
 ## License
-
 MIT
