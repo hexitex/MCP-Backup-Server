@@ -1,4 +1,5 @@
 # MCP Backup Server
+[![smithery badge](https://smithery.ai/badge/@hexitex/MCP-Backup-Server)](https://smithery.ai/server/@hexitex/MCP-Backup-Server)
 
 A specialized MCP server that provides backup and restoration capabilities for AI agents and code editing tools. Tested in both Cursor and Windsurf editors.
 
@@ -41,6 +42,15 @@ This system serves a different purpose than Git:
 
 ## Setup
 
+### Installing via Smithery
+
+To install Backup Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@hexitex/MCP-Backup-Server):
+
+```bash
+npx -y @smithery/cli install @hexitex/MCP-Backup-Server --client claude
+```
+
+### Installing Manually
 ```bash
 # Install dependencies
 npm install
