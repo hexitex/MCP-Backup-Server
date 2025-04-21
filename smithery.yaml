@@ -1,0 +1,28 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    properties:
+      backupDir:
+        type: string
+        default: ./.code_backups
+        description: Directory to store regular backups
+      emergencyBackupDir:
+        type: string
+        default: ./.code_emergency_backups
+        description: Directory to store emergency backups
+      maxVersions:
+        type: number
+        default: 10
+        description: Maximum number of backup versions to keep per file/folder
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'node', args: ['dist/index.js'], env: { BACKUP_DIR: config.backupDir, EMERGENCY_BACKUP_DIR: config.emergencyBackupDir, MAX_VERSIONS: String(config.maxVersions) } })
+  exampleConfig:
+    backupDir: ./.code_backups
+    emergencyBackupDir: ./.code_emergency_backups
+    maxVersions: 20
