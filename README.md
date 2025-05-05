@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/hexitex-mcp-backup-server-badge.png)](https://mseep.ai/app/hexitex-mcp-backup-server)
+
 # MCP Backup Server
 [![smithery badge](https://smithery.ai/badge/@hexitex/MCP-Backup-Server)](https://smithery.ai/server/@hexitex/MCP-Backup-Server)
 
